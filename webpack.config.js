@@ -92,7 +92,7 @@ if(env.development) {
   const clientHost = "localhost";
   const clientPort = "3000";
 
-  const devUrl = `${clientProtocol}//${clientHost}:${clientPort}`;
+  const devUrl = `${clientProtocol}//${clientHost}:${clientPort}/`;
 
   config.cache = true;
   config.devServer = {
@@ -106,7 +106,7 @@ if(env.development) {
   config.devtool = 'eval';
 
   config.entry = [
-    `webpack-dev-server/client?${devUrl}`,
+    `webpack-hot-middleware/client?${devUrl}`,
     'webpack/hot/only-dev-server',
   ].concat(config.entry);
 

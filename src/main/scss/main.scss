@@ -24,6 +24,8 @@ $fa-font-path: '~font-awesome/fonts';
 @import 'helpers/animations';
 @import 'helpers/utils';
 
+@import 'layout/content';
+
 //components - @import 'components/<name>';
 @import 'components/buttons';
 

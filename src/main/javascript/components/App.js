@@ -18,7 +18,7 @@ export default class App extends Component {
     return (
 			<div>
 				<h1>  Hello World! OOOOO ! </h1>
-        <MyButton className="btn add-btn" onClick={this.hello} message="WOW!"/>
+        <MyButton className="btn add-btn" onClick={this.hello} message="WOW!!!!!!!!"/>
 			</div>
 		);
   }
