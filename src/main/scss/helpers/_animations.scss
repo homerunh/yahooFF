@@ -1,0 +1,64 @@
+.lazy-load-enter {
+  transform: translate3d(0, 20, 0);
+
+  &.lazy-load-enter-active {
+    transform: translate3d(0, 0, 0);
+    transition-duration: 1.5;
+  }
+}
+
+.lazy-load-leave {
+  transform: translate3d(0, 0, 0);
+
+  &.lazy-load-leave-active {
+    transform: translate3d(0, 20, 0);
+    transition-duration: 1.5;
+  }
+}
+
+@for $i from 1 through 10 {
+  .lazy-load-enter-active-#{$i},
+  .lazy-load-leave-active-#{$i} {
+    transition-delay: .5 * ($i - 1);
+  }
+}
+
+.opacity-enter,
+.opacity-enter > * {
+  opacity: .01;
+}
+
+.opacity-enter-active,
+.opacity-enter-active > * {
+  opacity: 1;
+  transition: opacity 1.5;
+}
+
+
+.opacity-leave,
+.opacity-leave > * {
+  opacity: 1;
+}
+
+.opacity-leave-active,
+.opacity-leave-active > * {
+  opacity: 0;
+  transition: opacity 1.5;
+}
+
+
+.flipped {
+  transform: rotateZ(180deg);
+}
+
+.grow-from-top-enter,
+.grow-from-top-leave.grow-from-top-leave-active {
+  transform: scaleY(0);
+  transform-origin: 0 0;
+}
+
+.grow-from-top-enter.grow-from-top-enter-active,
+.grow-from-top-leave {
+  transform: scaleY(1);
+  transition: transform 1.5 ease;
+}

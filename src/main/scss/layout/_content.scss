@@ -1,0 +1,45 @@
+html {
+  font-size: $font-size-base;
+}
+
+body {
+  color: $text-color;
+  font-family: $roboto;
+}
+
+// scss-lint:disable IdSelector
+html,
+body,
+#app {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  height: 100%;
+  min-height: 100%;
+}
+
+#app .draft-helper {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  flex-wrap: nowrap;
+
+  > .sidebar {
+    flex-shrink: 0;
+  }
+
+  > main {
+    background-color: $main-content-color;
+    flex-grow: 1;
+    max-height: 100vh;
+    padding: 0 .5em;
+  }
+}
+
+main .card {
+  background-color: $white-base;
+  flex-basis: 0;
+  flex-grow: 1;
+  margin: .5em .25em;
+}
+// scss-lint:enable IdSelector

@@ -1,0 +1,110 @@
+.clear-btn {
+  background: transparent;
+  border: 0;
+}
+
+.btn {
+  border: 0;
+  color: $white-base;
+  padding: .5em 1em;
+
+  &.btn-default {
+    background-color: $concrete;
+
+    &:hover {
+      background-color: $asbestos;
+    }
+  }
+
+  &.btn-primary {
+    background-color: $peter-river;
+
+    &:hover {
+      background-color: $belize-hole;
+    }
+  }
+
+  &.btn-secondary {
+    background-color: $emerald;
+
+    &:hover {
+      background-color: $nephritis;
+    }
+  }
+
+  &.btn-error {
+    background-color: $alizarin;
+
+    &:hover {
+      background-color: $pomegranate;
+    }
+  }
+
+  &.btn-clear {
+    background: transparent;
+    color: $material-blue;
+    transition: background $transition-time;
+
+    &:focus,
+    &:hover {
+      background: $material-hover-blue;
+      outline: none;
+    }
+  }
+}
+
+
+// Equal width buttons
+// Need to define own margin on .btn if you want spacing between them
+.btn-group {
+  @extend %equal-width;
+
+  > .btn {
+    margin: 0 .5em;
+  }
+}
+
+.floating-btn.floating-btn-primary {
+  background-color: $orange;
+}
+
+.btn-waypoint {
+  @extend .btn;
+  @extend .btn-primary;
+
+  position: relative;
+}
+
+.collection-filter > .btn {
+  padding: .25em;
+}
+
+.close-btn {
+  color: $asbestos;
+  font-size: 1em;
+  padding: .25em;
+  transition: transform $transition-time;
+
+  &:hover {
+    color: $concrete;
+  }
+}
+
+.add-btn {
+  color: $dark-icon;
+  font-size: 1em;
+  margin-top: .5em;
+  padding: .25em;
+  text-align: left;
+  transition: transform $transition-time;
+  width: 100%;
+
+  > span {
+    font-size: .9em;
+  }
+
+  &:hover {
+    color: $concrete;
+  }
+}
+

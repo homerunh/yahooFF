@@ -1,0 +1,30 @@
+@import '~normalize.css/normalize';
+
+$fa-font-path: '~font-awesome/fonts';
+@import '~font-awesome/scss/font-awesome';
+
+
+// importing specific bootstrap components
+// If you think it is necessary to add more, check out vendors/bootstrap/_bootstrap.scss for imports
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/variables';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/mixins';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/scaffolding';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/type';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/tables';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/forms';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/media';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/list-group';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/utilities';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/responsive-utilities';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/progress-bars';
+
+// All helpers
+@import 'helpers/variables';
+@import 'helpers/mixins';
+@import 'helpers/animations';
+@import 'helpers/utils';
+
+//components - @import 'components/<name>';
+@import 'components/buttons';
+
+@import 'layout/content';

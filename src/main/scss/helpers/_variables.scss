@@ -1,0 +1,163 @@
+$transition-time: .15s;
+$animation-time: .15s;
+
+$lazy-load-transition-distance: 300px;
+$lazy-load-transition-delay: .03s;
+
+// ==================================================================
+// Colors
+$turquoise: #1abc9c;
+$green-sea: #16a085;
+$sun-flower: #f1c40f;
+$orange: #f39c12;
+$emerald: #2ecc71;
+$nephritis: #27ae60;
+$carrot: #e67e22;
+$pumpkin: #d35400;
+$peter-river: #3498db;
+$belize-hole: #2980b9;
+$alizarin: #e74c3c;
+$pomegranate: #c0392b;
+$amethyst: #9b59b6;
+$wisteria: #8e44ad;
+$clouds: #ecf0f1;
+$silver: #bdc3c7;
+$wet-asphalt: #34495e;
+$midnight-blue: #2c3e50;
+$concrete: #95a5a6;
+$asbestos: #7f8c8d;
+$blue-spinner: #4285f4;
+$red-spinner: #de3e35;
+$yellow-spinner: #f7c223;
+$green-spinner: #1b9a59;
+
+
+$black-base: #000;
+$white-base: #fff;
+$box-shadow-15: rgba(0, 0, 0, .15);
+$box-shadow-22: rgba(0, 0, 0, .22);
+$box-shadow-29: rgba(0, 0, 0, .29);
+$box-shadow-30: rgba(0, 0, 0, .3);
+$box-shadow-40: rgba(0, 0, 0, .4);
+
+$material-blue: #3f51b5;
+$material-hover-blue: rgba(63, 81, 181, .2);
+
+// ==================================================================
+// Colors for icons/text/other -- Material Design
+$text-color: lighten($black-base, 13%);
+$dark-icon: lighten($black-base, 46%);
+$disabled-text-color: lighten($black-base, 62%);
+$divider-color: lighten($black-base, 88%);
+
+// ==================================================================
+// Fonts
+$roboto: 'Roboto', sans-serif;
+$font-weights: (
+  (300 Light)
+  (400 Regular)
+  (500 Medium)
+  (700 Bold)
+);
+
+
+// ===================================================================
+// Main Content
+$main-content-color: #f7f7f7;
+$box-shadow: 0 0 4px $box-shadow-15, 0 2px 4px $box-shadow-29;
+$padding: .5em;
+
+
+// ==================================================================
+// Sidebar
+$sidebar-size: 70px;
+$sidebar-open-size: 300px;
+$sidebar-bg: $midnight-blue;
+$sidebar-font: $roboto;
+$sidebar-font-size: 1.2em;
+$sidebar-header-padding: .5em 0 0;
+
+$sidebar-open-header-padding: .5em .5em .5em 1em;
+$sidebar-open-line-color: $wet-asphalt;
+$sidebar-open-line-height: 2px;
+
+$sidebar-nav-link-color: $concrete;
+$sidebar-nav-item-line-color: $wet-asphalt;
+$sidebar-nav-item-line-width: 90%;
+$sidebar-nav-item-line-height: 3px;
+
+// ===================================================================
+// Card
+$card-box-shadow: $box-shadow;
+$card-header-bg-color: $belize-hole;
+$card-header-color: $clouds;
+$card-footer-bg-color: $concrete;
+$card-footer-color: $black-base;
+$card-content-padding: 1.5em;
+
+
+// ===================================================================
+// TypeAhead
+$typeahead-menu-z-index: 1;
+$typeahead-menu-box-shadow: 0 0 4px $box-shadow-15, 0 2px 6px $box-shadow-40;
+$typeahead-menu-max-height: 200px;
+$typeahead-input-btn-z-index: 4;
+$typeahead-padding-right: 1.5em;
+$typeahead-border: 2px solid;
+$typeahead-selected-radius: 5px;
+
+
+// ===================================================================
+// Tabs
+$tabs-font-color: $black-base;
+$tabs-content-color: $white-base;
+$tabs-inactive-color: $silver;
+$tabs-slider-color: $peter-river;
+$tabs-slider-height: 2px;
+$tabs-active-icon-color: $peter-river;
+
+// ===================================================================
+// Underlined Input
+$underlined-input-line-height: 2px;
+$underlined-input-color: $dark-icon;
+$underlined-input-active-color: $peter-river;
+
+// ===================================================================
+// Select Dropdown
+$select-dropdown-toggle-box-shadow: 0 0 2px $box-shadow-29;
+$select-dropdown-toggle-padding: 1em 1.5em;
+$select-dropdown-toggle-hover-color: blue;
+$filter-dropdown-max-height: 300px;
+
+
+// ===================================================================
+// Modal Dialog
+$dialog-min-width: 450px;
+$dialog-max-width: 600px;
+$dialog-z-index: 18;
+$overlay-z-index: 15;
+$dialog-box-shadow: 0 19px 60px $box-shadow-30, 0 15px 20px $box-shadow-22;
+$dialog-content-color: #757575;
+$dialog-title-color: $black-base;
+$dialog-btn-group-size: 200px;
+$overlay-opacity: .4;
+
+// ===================================================================
+// Editable Field
+$editable-field-min-width: 150px;
+
+// ===================================================================
+// Field Error
+$field-error-bg-color: $main-content-color;
+$field-error-color: $alizarin;
+
+// ===================================================================
+// Loading Spinner - Material Design-ish
+$spinner-offset: 187;
+$spinner-animation-duration: 1.4s;
+
+
+// ===================================================================
+// Person
+$person-card-size: 996px;
+$person-img-size: 80px;
