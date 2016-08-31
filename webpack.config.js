@@ -42,6 +42,9 @@ let config = {
       test: /\.(png|jpe?g)$/,
       exclude: /node_modules/,
       loader: 'file?name=imgs/[name].[ext]',
+    }, {
+      test: /\.json$/,
+      loader: 'json',
     }],
   },
 

@@ -1,0 +1,11 @@
+{
+  "server": {
+    "protocol": "http",
+    "host": "localhost:3000"
+  },
+  "yahoo": {
+    "key": "dj0yJmk9QUdublNzWFZaWGhSJmQ9WVdrOWJXcE1jR3h1Tm5VbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD00Zg--",
+    "secret": "7dc2d7943d8bdbc9f85094213cddb6a99b1d3c1d",
+    "callback": "/handle_yahoo_callback"
+  }
+}
