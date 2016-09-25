@@ -59,6 +59,7 @@
     "font-awesome": "^4.4.0",
     "grant-express": "^3.6.2",
     "html-webpack-plugin": "^2.22.0",
+    "immutable-devtools": "0.0.7",
     "json": "^9.0.4",
     "json-loader": "^0.5.4",
     "node-sass": "^3.8.0",

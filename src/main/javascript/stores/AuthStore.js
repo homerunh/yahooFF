@@ -1,10 +1,17 @@
 import AppDispatcher from 'FF/common/AppDispatcher';
+import immutable from 'immutable';
+import installDevTools from 'immutable-devtools';
+installDevTools(immutable);
+import { Map } from 'immutable';
 
 import FluxStore from 'FF/stores/FluxStore';
 import AuthConstants from 'FF/actionConstants/AuthConstants';
 
 let _token = '';
 let _secret = '';
+let _data = Map({
+  some_data: Map(),
+});
 
 class _AuthStore extends FluxStore {
   getToken() {
@@ -13,6 +20,10 @@ class _AuthStore extends FluxStore {
 
   getSecret() {
     return _secret;
+  }
+
+  getData() {
+    return _data;
   }
 }
 
@@ -27,6 +38,9 @@ AppDispatcher.register(payload => {
       break;
     case AuthConstants.AUTH_UPDATE_SECRET:
       _secret = action.data;
+      break;
+    case AuthConstants.AUTH_UPDATE_DATA:
+      _data = _data.set('some_data', action.data);
       break;
     default:
       return;

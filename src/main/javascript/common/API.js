@@ -1,9 +1,10 @@
 import request from 'request';
 import oauthSignature from 'oauth-signature';
+import { fromJS } from 'immutable';
 import AuthStore from 'FF/stores/AuthStore';
-
-let random = 0,
-  now = 0;
+import { urlify, join } from 'FF/utils/APIUtils';
+import AuthActions from 'FF/actions/AuthActions';
+import { BASE_API_URL, CLIENT_ID, CLIENT_SECRET, LEAGUE_LOOKUP } from 'FF/common/StringConstants';
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
@@ -11,67 +12,342 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-export function generateSignature(){
-  let httpMethod = 'GET',
-    localRandom = getRandomInt(1, 1472603836),
-    localNow = Math.round(Date.now()/1000),
-    url = 'http://fantasysports.yahooapis.com/fantasy/v2/league/314.l.75102',
+export function generateSignature(verb, url, random, timestamp ){
+  let httpMethod = verb,
     parameters = {
       format: 'json',
-      oauth_consumer_key: 'dj0yJmk9QUdublNzWFZaWGhSJmQ9WVdrOWJXcE1jR3h1Tm5VbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD00Zg--',
-      oauth_nonce: localRandom,
+      oauth_consumer_key: CLIENT_ID,
+      oauth_nonce: random,
       oauth_signature_method: 'HMAC-SHA1',
-      oauth_timestamp: localNow,
-      oauth_token: AuthStore.getToken(), //store
+      oauth_timestamp: timestamp,
+      oauth_token: AuthStore.getToken(),
       oauth_version: '1.0',
     },
-    consumerSecret = '7dc2d7943d8bdbc9f85094213cddb6a99b1d3c1d',
-    tokenSecret = AuthStore.getSecret(), //store
+    consumerSecret = CLIENT_SECRET,
+    tokenSecret = AuthStore.getSecret(),
 
     // generates a RFC 3986 encoded, BASE64 encoded HMAC-SHA1 hash
     encodedSignature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret);
     // generates a BASE64 encode HMAC-SHA1 hash
     //signature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret,
         //{ encodeSignature: false});
-  //console.log(Date.now());
-  random = localRandom;
-  now = localNow;
   return encodedSignature;
 }
 
-export function buildLeagueDataUrl() {
-  let signature = generateSignature();
-  return 'http://localhost:1337/fantasysports.yahooapis.com/fantasy/v2/league/314.l.75102?' +
-    'format=json&' +
-    'oauth_consumer_key=dj0yJmk9QUdublNzWFZaWGhSJmQ9WVdrOWJXcE1jR3h1Tm5VbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD00Zg--&' +
-    'oauth_nonce=' + random + '&' +
-    'oauth_signature_method=HMAC-SHA1&' +
-    'oauth_timestamp=' + now + '&' +
-    'oauth_token=' + encodeURIComponent(AuthStore.getToken()) + '&' +
-    'oauth_version=1.0&' +
-    'oauth_signature=' + signature;
+export function buildQueryString(random, timestamp, signature) {
+  return join('&',
+    'format=json',
+    'oauth_consumer_key=' + CLIENT_ID,
+    'oauth_nonce=' + random,
+    'oauth_signature_method=HMAC-SHA1',
+    'oauth_timestamp=' + timestamp,
+    'oauth_token=' + encodeURIComponent(AuthStore.getToken()),
+    'oauth_version=1.0',
+    'oauth_signature=' + signature
+    );
 }
 
-export function getLeagueData() {
-  let options = {
-    url: buildLeagueDataUrl(),
-    headers: {
-      'Origin': 'http://fantasysports.yahooapis.com/',
-    },
-  };
-  request(options, function (error, response, body) {
+// *****************************  League URLs ******************************************************* //
+
+/**
+ * Build URL to get League Metadata:
+ * Includes league key, id, name, url, draft status, number of teams, and current week information.
+ *
+ * URI: /fantasy/v2/league/{league_key}/metadata
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/league/223.l.431/metadata
+ *
+ */
+export function buildLeagueMetadataUrl(year) {
+  return urlify(BASE_API_URL, 'league', LEAGUE_LOOKUP[year], 'metadata');
+}
+
+/**
+ * Build URL to get League Settings:
+ * League settings. For instance, draft type, scoring type, roster positions, stat categories and modifiers, divisions.
+ *
+ * URI: /fantasy/v2/league/{league_key}/settings
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/league/223.l.431/settings
+ */
+export function buildLeagueSettingsUrl(year) {
+  return urlify(BASE_API_URL, 'league', LEAGUE_LOOKUP[year], 'settings');
+}
+
+/**
+ * Build URL to get League Standings:
+ * Ranking of teams within the league. Accepts Teams as a sub-resource, and includes team_standings data by default beneath the teams
+ *
+ * URI: /fantasy/v2/league/{league_key}/standings
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/league/223.l.431/standings
+ */
+export function buildLeagueStandingsUrl (year) {
+  return urlify(BASE_API_URL, 'league', LEAGUE_LOOKUP[year], 'standings');
+}
+
+/**
+ * Build URL to get League Scoreboard:
+ * League scoreboard. Accepts Matchups as a sub-resource, which in turn accept Teams as a sub-resource. Includes team_stats data by default.
+ *
+ * URI: current week    -->  /fantasy/v2/league/{league_key}/scoreboard
+ *      particular week -->  /fantasy/v2/league/{league_key}/scoreboard;week={week}
+ *
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/league/223.l.431/scoreboard;week=2
+ */
+export function buildLeagueScoreboardUrl(year, week = 'curent') {
+  return urlify(BASE_API_URL, 'league', LEAGUE_LOOKUP[year], 'scoreboard;week=' + week);
+}
+
+/**
+ * Build URL to get League Teams:
+ * All teams in the league.
+ *
+ * URI: /fantasy/v2/league/{league_key}/teams
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/league/223.l.431/teams
+ */
+export function buildLeagueTeamsUrl(year) {
+  return urlify(BASE_API_URL, 'league', LEAGUE_LOOKUP[year], 'teams' );
+}
+
+/**
+ * Build URL to get League Players:
+ * The league's eligible players
+ *
+ * URI: /fantasy/v2/league/{league_key}/players
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/league/223.l.431/players
+ */
+export function buildLeaguePlayersUrl(year) {
+  return urlify(BASE_API_URL, 'league', LEAGUE_LOOKUP[year], 'players');
+}
+
+/**
+ * Build URL to get League Draft Results:
+ * Draft results for all teams in the league.
+ *
+ * URI: /fantasy/v2/league/{league_key}/draftresults
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/league/223.l.431/draftresults
+ */
+export function buildLeagueDraftResultsUrl(year) {
+  return urlify(BASE_API_URL, 'league', LEAGUE_LOOKUP[year], 'draftresults');
+}
+
+/**
+ * Build URL to get League Tranactions:
+ * League transactions -- adds, drops, and trades
+ *
+ * URI: /fantasy/v2/league/{league_key}/transactions
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/league/223.l.431/transactions
+ */
+export function buildLeagueTransactionUrl(year) {
+  return urlify(BASE_API_URL, 'league', LEAGUE_LOOKUP[year], 'transactions');
+}
+
+// *****************************  Team URLs ******************************************************* //
+
+
+/**
+ * Build URL to get Team Metadata:
+ * Includes team key, id, name, url, division ID, logos, and team manager information.
+ *
+ * URI: /fantasy/v2/team/{team_key}/metadata
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/team/223.l.431.t.9/metadata
+ */
+export function buildTeamMetadataUrl(teamId) {
+  return urlify(BASE_API_URL, 'team', teamId, 'metadata');
+}
+
+/**
+ * Build URL to get Team Stats for an entire season:
+ * Team statistical data and points.
+ *
+ * URI: /fantasy/v2/team/{team_key}/stats
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/team/223.l.431.t.9/stats
+ */
+export function buildTeamStatsBySeasonUrl(teamId) {
+  return urlify(BASE_API_URL, 'team', teamId, 'stats');
+}
+
+/**
+ * Build URL to get Team Stats for a particular week in a season:
+ * Team statistical data and points.
+ *
+ * URI: /fantasy/v2/team/{team_key}/stats;type=week;week={week}
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/team/223.l.431.t.9/stats;type=week;week=2
+ */
+export function buildTeamStatsByWeekUrl(teamId, week) {
+  return urlify(BASE_API_URL, 'team', teamId, 'stats;type=week;week=' + week);
+}
+
+/**
+ * Build URL to get Team Standings:
+ * Team rank, wins, losses, ties, and winning percentage (as well as divisional data if applicable).
+ *
+ * URI: /fantasy/v2/team/{team_key}/standings
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/team/223.l.431.t.9/standings
+ */
+export function buildTeamStandingsUrl(teamId) {
+  return urlify(BASE_API_URL, 'team', teamId, 'standings');
+}
+
+/**
+ * Build URL to get Team Roster:
+ * Team roster. Accepts a week parameter. Also accepts Players as a sub-resource (included by default)
+ *
+ * URI: /fantasy/v2/team/{team_key}/roster;week={week}
+ * Example:  http://fantasysports.yahooapis.com/fantasy/v2/team/223.l.431.t.9/roster;week=2 - The week 2 roster for team 223.l.431.t.9
+ */
+export function buildTeamRosterUrl(teamId, week) {
+  return urlify(BASE_API_URL, 'team', teamId, 'roster;week=' + week);
+}
+
+/**
+ * Build URL to get Team Draft Results:
+ * List of players drafted by the team.
+ *
+ * URI: /fantasy/v2/team/{team_key}/draftresults
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/team/223.l.431.t.9/draftresults
+ */
+export function buildTeamDraftResultsUrl(teamId) {
+  return urlify(BASE_API_URL, 'team', teamId, 'draftresults');
+}
+
+/**
+ * Build URL to get Team Matchups:
+ * All the matchups this team has scheduled (for H2H leagues).
+ *
+ * URI:  all matchups    --> /fantasy/v2/team/{team_key}/matchups
+ *       particular week --> /fantasy/v2/team/{team_key}/matchups;weeks=1,3,6
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/team/223.l.431.t.9/matchups;weeks=1,3,6
+ */
+export function buildTeamMatchupsUrl(teamId) {
+  return urlify(BASE_API_URL, 'team', teamId, 'matchups');
+}
+
+
+/**
+ * Build URL to get Roster:
+ *
+ * URI: /fantasy/v2/team/{team_key}/roster
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/team/223.l.431.t.9/roster/
+ */
+export function buildRosterUrl(teamId) {
+  return urlify(BASE_API_URL, 'team', teamId, 'roster');
+}
+
+
+/**
+ * Build URL to get Roster Players:
+ *
+ *
+ * URI: /fantasy/v2/team/{team_key}/roster/players
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/team/223.l.431.t.9/roster/players
+ */
+export function buildRosterPlayersUrl(teamId) {
+  return urlify(BASE_API_URL, 'team', teamId, 'roster', 'players');
+}
+
+
+//player (nfl player)
+
+//player metadata
+/**
+ * Build URL to get Player Metadata:
+ * Includes player key, id, name, editorial information, image, eligible positions, etc.
+ *
+ * URI: /fantasy/v2/player/{player_key}/metadata
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/player/223.p.5479 - Drew Brees's info in the 2009 season:
+ */
+export function buildPlayerMetadataUrl(playerId) {
+  return urlify(BASE_API_URL, 'player', playerId);
+}
+
+//player season stats
+/**
+ * Build URL to get Player Stats:
+ * Player stats and points (if in a league context).
+ *
+ * URI: Season stats --> /fantasy/v2/player/{player_key}/stats
+ *      Week Stats   --> /fantasy/v2/player/{player_key}/stats;type=week;week={week}
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/player/223.p.5479/stats - Drew Brees's info and stats in the 2009 season
+ */
+export function buildPlayerSeasonStatsUrl(playerId) {
+  return urlify(BASE_API_URL, 'player', playerId, 'stats');
+}
+
+//player particular-week stats
+/**
+ * Build URL to get Player Stats:
+ * Player stats and points (if in a league context).
+ *
+ * URI: Season stats --> /fantasy/v2/player/{player_key}/stats
+ *      Week Stats   --> /fantasy/v2/player/{player_key}/stats;type=week;week={week}
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/player/223.p.5479/stats;type=week;week=1 - Drew Brees's info and stats in the 2009 week 1
+ */
+export function buildPlayerWeekStatsUrl(playerId, week) {
+  return urlify(BASE_API_URL, 'player', playerId, 'stats;type=week;week=' + week);
+}
+
+//player ownership
+/**
+ * Build URL to get Player Ownership:
+ * The player ownership status within a league (whether they're owned by a team, on waivers, or free agents). Only relevant within a league.
+ *
+ * URI: /fantasy/v2/league/{league_key}/players;player_keys={player_key}/ownership
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/league/223.l.431/players;player_keys=223.p.5479/ownership
+ */
+export function buildPlayerOwnershipUrl(year, playerId) {
+  return urlify(BASE_API_URL, 'league', LEAGUE_LOOKUP[year], 'players;player_keys=' + playerId, 'ownership');
+}
+
+//player percent owned
+/**
+ * Build URL to get Player Percent Owned:
+ * Data about ownership percentage of the player
+ *
+ * URI: /fantasy/v2/player/{player_key}/percent_owned
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/player/223.p.5479/percent_owned
+ */
+export function buildPlayerPercentOwned(playerId) {
+  return urlify(BASE_API_URL, 'player', playerId, 'percent_owned');
+}
+
+//player draft analysis
+/**
+ * Build URL to get Player Draft Analysis:
+ * Average pick, Average round and Percent Drafted.
+ *
+ * URI: /fantasy/v2/player/{player_key}/draft_analysis
+ * Example: http://fantasysports.yahooapis.com/fantasy/v2/player/223.p.5479/draft_analysis
+ */
+export function buildPlayerDraftAnalysis(playerId) {
+  return urlify(BASE_API_URL, 'player', playerId, 'draft_analysis');
+}
+
+
+//
+
+export function buildRequest(verb, url) {
+  let someRandomInt = getRandomInt(1, 1472603836),
+    now = Math.round(Date.now()/1000),
+    signature = generateSignature(verb, 'http://' + url, someRandomInt, now);
+
+  return urlify('http://localhost:1337', url) + "?" + buildQueryString(someRandomInt, now, signature);
+}
+
+export function getLeagueTeamData(year) {
+
+  request(buildRequest('GET', buildLeagueTeamsUrl(year)), function (error, response, body) {
     if (!error && response.statusCode === 200) {
-      console.log(body); // Show the HTML for the Google homepage.
+      console.log(body);
+      AuthActions.updateAuthData(fromJS(JSON.parse(body)));
     }
   });
 }
 
-// http://fantasysports.yahooapis.com/fantasy/v2/league/314.l.75102
-// ?format=json
-// &oauth_consumer_key=dj0yJmk9QUdublNzWFZaWGhSJmQ9WVdrOWJXcE1jR3h1Tm5VbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD00Zg--
-// &oauth_nonce=601399878
-// &oauth_signature_method=HMAC-SHA1
-// &oauth_timestamp=1472610034
-// &oauth_token=A%3DQbsduvXG5xlBOqcGouiyJ0ZZGJmlZqZeRbqF.vBcfiWWb.BzFVhdx5NbJJj5M7pl3fuwn0_YwYFXwDu4fwIPOXf4YdU6OH_LkrFd7ZccmdM7EvoKcwH6do4ApVjWSpQA.iy3TLt2HPU6g1sKR.ALrlp6avIxSZI_kAo6Ymuc91qEeJAnRPCIlFjhk.6dYioqI.M7mnKgx0xXF81RHWfvvVqzzX9BGSP..qDp_tH8ikk2NmlHzw0ZB_gI7Ok39V5eXZQ9IvQ.RxNa6GmFVN_5Mb9uG3mS1Ciau3ZivUsn8xcPA8C2W8WVhpqtKKuU2gGZcymfMLTgJQnkXi1r6.UVmIAMv3G1Dju6gOPgKJ8uZUH7VYp_9IRi_.7gFQ7TV94xLCxVplru143Pw4p7Z5pZ4MIJvlJ1wk6jfXsAkXIdpJEVA6VPGLqDkGLxx2lxRq4fTzdwQGiNwYWrKTnv872ESWYfFDomJoloEXJiqbU_XZWa9ydMUH1Fym57bNIM_6M163syIzuO_Ee7RQrakQynMMyUL0WE5qQK23UjziVxtfL7DG1Ag30DYZ4BrPmbE41j7hm9P4t_c5IMYT5cePjfLtxXgzWSsrIersGs9jKc6x7oKJz9MZ3K6.XoatlGHyF8WV4EamPs9ilcHlpMjRnR.b.6bo4ZDwcF92nv7lJ3CuzERVC3Zo0MgW_av_qGsvODXltzPe0HPtAt1vwtBsW4z0HBpddO_azSShz0JE5jdAn.l9Gj3LLYM.s4kLiO42X4o_bDx._7u2eeHDCN.FFkxcZO35126DM9AY4_7G3jyAUERNhDe2PM98fxGEA3yN1xS_wXtTGdcpgQSwyJ4xE2HFlZvPN6h04wTBUh.YWRHVxSRtHB2e_6Rh7y
-// &oauth_version=1.0
-// &oauth_signature=%2B2Qc%2FF7Hp4FHVs80TyzZrn76IB0%3D
+export function getLeagueScoreboard(year, week) {
+
+  request(buildRequest('GET', buildLeagueScoreboardUrl(year, week)), function (error, response, body) {
+    if (!error && response.statusCode === 200) {
+      console.log(body);
+      AuthActions.updateAuthData(fromJS(JSON.parse(body)));
+    }
+  });
+}

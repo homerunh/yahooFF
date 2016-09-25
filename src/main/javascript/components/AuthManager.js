@@ -12,6 +12,7 @@ import MyButton from'FF/components/MyButton';
   return {
     authToken: AuthStore.getToken(),
     authSecret: AuthStore.getSecret(),
+    authData: AuthStore.getData(),
   };
 }, [AuthStore])
 export default class AuthManager extends Component {
@@ -34,11 +35,9 @@ export default class AuthManager extends Component {
   }
 
   render() {
-    
     return (
       <div>
         <a href="http://localhost:3000/connect/yahoo" >AUTHENTICATE w/YAHOO</a>
-        {window.location.toString()}
         <MyButton className="btn add-btn" onClick={this.saveCreds} message="click to save creds"/>
       </div>
     );

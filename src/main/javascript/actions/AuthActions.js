@@ -18,4 +18,11 @@ export default {
       data: data,
     });
   },
+
+  updateAuthData(data) {
+    AppDispatcher.handleAction({
+      actionType: AuthConstants.AUTH_UPDATE_DATA,
+      data: data,
+    });
+  },
 };
