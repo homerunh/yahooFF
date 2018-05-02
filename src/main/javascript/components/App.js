@@ -6,7 +6,9 @@ import AuthManager from 'FF/components/AuthManager';
 import { //generateSignature,
   getLeagueTeamData,
   getLeagueScoreboard,
-   } from 'FF/common/API';
+  getLeagueStandings,
+  testAddTable,
+} from 'FF/common/API';
 
 export default class App extends Component {
 
@@ -32,6 +34,14 @@ export default class App extends Component {
     getLeagueScoreboard(2005, 1);
   }
 
+  standings() {
+    getLeagueStandings(2011);
+  }
+
+  testAddTable() {
+    testAddTable();
+  }
+
 
   render() {
 
@@ -42,6 +52,8 @@ export default class App extends Component {
         <AuthManager />
         <MyButton className="btn add-btn" onClick={this.leagueTeamData} message="Get Team Data"/>
         <MyButton className="btn add-btn" onClick={this.scoreboard} message="Get scoreboard Data"/>
+        <MyButton className="btn add-btn" onClick={this.testAddTable} message="Test add a table"/>
+        <MyButton className="btn add-btn" onClick={this.standings} message="Get League Standings"/>
 			</div>
 		);
   }

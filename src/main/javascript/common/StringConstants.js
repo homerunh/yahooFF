@@ -3,6 +3,10 @@ export const BASE_API_URL = "fantasysports.yahooapis.com/fantasy/v2";
 export const CLIENT_ID = "dj0yJmk9QUdublNzWFZaWGhSJmQ9WVdrOWJXcE1jR3h1Tm5VbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD00Zg--";
 export const CLIENT_SECRET= "7dc2d7943d8bdbc9f85094213cddb6a99b1d3c1d";
 
+export const CLIENT_ID2 = "dj0yJmk9TU1tUWNwcnh2TXVrJmQ9WVdrOVR6SjZia1IzTjJVbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD1hZg--";
+export const CLIENT_SECRET2 = "658f586062300d0844c01d4e504bd4e699b0d0d1";
+export const REDIRECT_URI="https://79316a07.ngrok.io";
+
 export const LEAGUE_LOOKUP = {
   2005: "124.l.353149",
   2006: "153.l.156972",

@@ -29,7 +29,7 @@ Fantasy manager tracking sheet:
   Sammy
   Ed
   Adam
-  ? "FantasyFootballGiant"
+  ? "FantasyFootballGiant" - Stefan
   Joel
 
 2008
@@ -71,7 +71,7 @@ Fantasy manager tracking sheet:
   Joe
 
 2011
-  ? "LegalizeGay"
+  ? "LegalizeGay" - Stefan
   Mark
   Dave
   Ryan
@@ -153,3 +153,65 @@ Fantasy manager tracking sheet:
   Matt
   Joe
   Joel
+
+  mappings:
+
+  readable  gibberish
+         a  s
+         b  t
+         c  u
+         d  v
+         e  w
+         f  x
+         g  y
+         h  z
+         i  a
+         j  b
+         k  
+         l  d
+         m  e
+         n  f
+         o  g
+         p  h
+         q  i
+         r  j
+         s  k
+         t  l
+         u  m
+         v  n
+         w  o
+         x
+         y  q
+         z
+
+
+ Yjwsl Kugll! /
+      Great scott
+      kmuzkwujwl/6wvs88601vtw0s7wvw141t5111us11994464uv1v247uvw354w02571uwv02159v.bsj
+      suchsecret/6eda88601dbe0a7ede141b5111ca11994464cd1d247cde354e02571ced02159d.jar
+
+      suchsecret/6eda88603dbe0a7ede143b5333ca33994464cd1d247cde154e02573cde02359d.jar
+
+
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-63828172-3', 'auto');
+      ga('send', 'pageview');
+
+  (xmfulagf(a,k,g,y,j,s,e)
+
+    {
+         GoogleAnalyticsObject
+      a['YggydwSfsdqlaukGtbwul']=j;
+      a[j]=a[j] || xmfulagf(){
+                (a[j].i=a[j].i||[]).hmkz(sjymewflk)},a[j].d=1*fwo Vslw();s=k.ujwslwWdwewfl(g),
+            e=k.ywlWdwewflkTqLsyFsew(g)[0];s.skqfu=1;s.kju=y;e.hsjwflFgvw.afkwjlTwxgjw(s,e)
+        })(oafvgo,vgumewfl,'kujahl','zllhk://ooo.yggydw-sfsdqlauk.uge/sfsdqlauk.bk','ys')
+
+        ys('ujwslw', 'MS-63828172-1', 'smlg');
+        ys('kwfv', 'hsywnawo');
+
+     
